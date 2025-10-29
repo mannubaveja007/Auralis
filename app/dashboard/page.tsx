@@ -213,28 +213,61 @@ function Dashboard() {
       </div>
 
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <motion.header
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="bg-white/70 backdrop-blur-xl border-b border-white/20 relative z-10 shadow-lg shadow-purple-500/10"
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 relative">
           <div className="flex items-center justify-between">
-            <div>
-              <GradientText
-                colors={['#3b82f6', '#8b5cf6', '#ec4899', '#8b5cf6', '#3b82f6']}
-                animationSpeed={6}
-              >
-                <h1 className="text-2xl font-bold">Auralis</h1>
-              </GradientText>
-              <p className="text-sm text-gray-600">Welcome, {user?.name}</p>
-            </div>
-            <button
-              onClick={logout}
-              className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition"
+            <motion.div
+              initial={{ x: -20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="flex items-center gap-4"
             >
-              <LogOut className="w-4 h-4" />
-              Logout
-            </button>
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl blur-md opacity-50"></div>
+                <div className="relative bg-gradient-to-r from-blue-500 to-purple-600 p-2.5 rounded-xl">
+                  <Sparkles className="w-6 h-6 text-white" />
+                </div>
+              </div>
+              <div>
+                <GradientText
+                  colors={['#3b82f6', '#8b5cf6', '#ec4899', '#8b5cf6', '#3b82f6']}
+                  animationSpeed={6}
+                >
+                  <h1 className="text-3xl font-bold tracking-tight">Auralis</h1>
+                </GradientText>
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                  className="text-sm text-gray-600 font-medium mt-0.5"
+                >
+                  Welcome back, <span className="text-purple-600 font-semibold">{user?.name}</span>
+                </motion.p>
+              </div>
+            </motion.div>
+            <motion.button
+              initial={{ x: 20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={logout}
+              className="relative group flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-gray-100 to-gray-50 hover:from-red-50 hover:to-orange-50 text-gray-700 hover:text-red-600 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg border border-gray-200/50 hover:border-red-200"
+            >
+              <LogOut className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+              <span className="font-medium">Logout</span>
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-red-500/0 to-orange-500/0 group-hover:from-red-500/10 group-hover:to-orange-500/10 transition-all duration-300"></div>
+            </motion.button>
           </div>
         </div>
-      </header>
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
+      </motion.header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         {/* Tabs */}
