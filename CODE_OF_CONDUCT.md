@@ -1,10 +1,5 @@
 # CODE_OF_CONDUCT
 
-----
-<img width="1710" height="846" alt="image" src="https://github.com/user-attachments/assets/30a4a0a0-9d13-4f60-b245-0cb356d472dc" />
-
-
-
 # Smart Notes (Auralis) Project's Code of Conduct
 
 ## 1. Our Commitment
