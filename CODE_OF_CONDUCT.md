@@ -1,10 +1,8 @@
-# CODE_OF_CONDUCT
-
-# Smart Notes (Auralis) Project's Code of Conduct
+# Smart Notes (Auralis) Project Code of Conduct
 
 ## 1. Our Commitment
 
-The Smart Notes (Auralis) project is built to empower learners, developers, and open-source contributors from all walks of life. Whether you’re fixing a typo or designing a whole new feature, every contribution matters. We are committed to ensuring a respectful, welcoming, and inclusive space for everyone, regardless of age, body size, disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
+The **[Smart Notes (Auralis)](https://auralis.appwrite.network/)** project is built to empower learners, developers, and open-source contributors from all walks of life. Whether you’re fixing a typo or designing a whole new feature, every contribution matters. We are committed to ensuring a respectful, welcoming, and inclusive space for everyone, regardless of age, body size, disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
 
 ## 2. Our Core Values & Contributor Expectations
 
@@ -51,7 +49,7 @@ This Code of Conduct applies to all spaces where the Smart Notes (Auralis) proje
 
 We are serious about our community standards. The project maintainers will investigate any violations of this Code of Conduct promptly and fairly.
 
-* **Reporting Concerns:** If you experience or observe behavior that violates these guidelines, please notify a **Project Admin or WOCS Mentor** (if applicable) or contact the maintainers directly via email. Please send detailed reports to @mannubaveja007 **[MAINTAINER_EMAIL_ADDRESS]**. All concerns will be handled with seriousness, respect, and confidentiality.
+* **Reporting Concerns:** If you experience or observe behavior that violates these guidelines, please notify a **Project Admin or WOCS Mentor** (if applicable) or contact the maintainers directly via email. Please send detailed reports to **[INSERT CONFIDENTIAL CONTACT EMAIL]**. All concerns will be handled with seriousness, respect, and confidentiality.
 * **Maintainer Responsibility:** Project maintainers are responsible for clarifying standards and taking appropriate corrective action. Maintainers are obligated to respect the privacy and security of the reporter.
 * **Consequences of Violations:** We reserve the right to take appropriate action, which may include:
     * **Reminder** of the guidelines
