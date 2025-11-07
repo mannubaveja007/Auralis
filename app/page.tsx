@@ -7,6 +7,7 @@ import './SmartNotes.css';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useTheme } from '../components/ThemeProvider';
 
 type PixelBlastVariant = 'square' | 'circle' | 'triangle' | 'diamond';
 
@@ -671,6 +672,7 @@ const PixelBlast: React.FC<PixelBlastProps> = ({
 const Auralis: React.FC = () => {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     // Redirect to dashboard if user is already logged in
@@ -683,18 +685,31 @@ const Auralis: React.FC = () => {
   if (loading) {
     return (
       <>
+        {/* Header with Theme Toggle */}
+        <header className="flex justify-between items-center p-6" style={{ pointerEvents: 'auto', position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, background: 'transparent' }}>
+          <h1 className="text-2xl font-bold" style={{ color: theme === 'dark' ? 'white' : '#222' }}>Auralis</h1>
+          <button
+            aria-label="Toggle dark mode"
+            onClick={toggleTheme}
+            className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+          >
+            {theme === 'dark' ? '🌙' : '☀️'}
+          </button>
+        </header>
         <div style={{
           position: 'fixed',
           top: 0,
           left: 0,
           width: '100vw',
           height: '100vh',
-          zIndex: 0
+          zIndex: 0,
+          background: theme === 'dark' ? '#0a0a0a' : '#ffffff',
+          transition: 'background 0.3s'
         }}>
           <PixelBlast
             variant="circle"
             pixelSize={3}
-            color="#B19EEF"
+            color={theme === 'dark' ? '#B19EEF' : '#333333'}
             liquid={true}
             liquidStrength={0.15}
             enableRipples={true}
@@ -706,7 +721,7 @@ const Auralis: React.FC = () => {
             edgeFade={0}
           />
         </div>
-        <div style={{ position: 'relative', zIndex: 10, minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '1.25rem' }}>
+        <div style={{ position: 'relative', zIndex: 10, minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: theme === 'dark' ? 'white' : '#222', fontSize: '1.25rem' }}>
           Loading...
         </div>
       </>
@@ -720,7 +735,7 @@ const Auralis: React.FC = () => {
 
   return (
     <>
-      {/* PixelBlast Background - Fixed to viewport */}
+      {/* PixelBlast Background - Fixed to viewport, theme-aware */}
       <div style={{
         position: 'fixed',
         top: 0,
@@ -728,12 +743,14 @@ const Auralis: React.FC = () => {
         width: '100vw',
         height: '100vh',
         zIndex: 0,
-        pointerEvents: 'auto'
+        pointerEvents: 'auto',
+        background: theme === 'dark' ? '#0a0a0a' : '#ffffff',
+        transition: 'background 0.3s'
       }}>
         <PixelBlast
           variant="circle"
           pixelSize={3}
-          color="#B19EEF"
+          color={theme === 'dark' ? '#B19EEF' : '#333333'}
           liquid={true}
           liquidStrength={0.15}
           enableRipples={true}
@@ -745,15 +762,21 @@ const Auralis: React.FC = () => {
           edgeFade={0}
         />
       </div>
-
       {/* Content Overlay */}
-      <div style={{ position: 'relative', zIndex: 10, minHeight: '100vh', color: 'white', pointerEvents: 'none' }}>
+      <div style={{ position: 'relative', zIndex: 10, minHeight: '100vh', color: theme === 'dark' ? 'white' : '#222', pointerEvents: 'none' }}>
         {/* Header */}
         <header className="flex justify-between items-center p-6" style={{ pointerEvents: 'auto' }}>
           <h1 className="text-2xl font-bold">Auralis</h1>
-          <nav>
-            <Link href="/login" className="mr-4 hover:underline">Sign In</Link>
+          <nav className="flex items-center gap-4">
+            <Link href="/login" className="hover:underline">Sign In</Link>
             <Link href="/signup" className="bg-purple-600 px-4 py-2 rounded hover:bg-purple-700">Get Started</Link>
+            <button
+              aria-label="Toggle dark mode"
+              onClick={toggleTheme}
+              className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+            >
+              {theme === 'dark' ? '🌙' : '☀️'}
+            </button>
           </nav>
         </header>
 

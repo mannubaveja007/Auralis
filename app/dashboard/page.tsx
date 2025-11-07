@@ -24,6 +24,7 @@ import dynamic from 'next/dynamic';
 import SpotlightCard from '@/components/SpotlightCard';
 import Squares from '@/components/Squares';
 import GradientText from '@/components/GradientText';
+import { useTheme } from '@/components/ThemeProvider';
 
 const DrawingCanvas = dynamic(() => import('@/components/DrawingCanvas'), {
   ssr: false,
@@ -39,6 +40,7 @@ export default function DashboardPage() {
 
 function Dashboard() {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [notes, setNotes] = useState<Note[]>([]);
   const [activeTab, setActiveTab] = useState<'notes' | 'insights'>('notes');
   const [isCreating, setIsCreating] = useState(false);
@@ -228,7 +230,7 @@ function Dashboard() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="bg-white/70 backdrop-blur-xl border-b border-white/20 relative z-10 shadow-lg shadow-purple-500/10"
+        className="bg-white/70 dark:bg-gray-900/80 backdrop-blur-xl border-b border-white/20 dark:border-gray-800/60 relative z-10 shadow-lg shadow-purple-500/10"
       >
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 relative">
@@ -262,19 +264,28 @@ function Dashboard() {
                 </motion.p>
               </div>
             </motion.div>
-            <motion.button
-              initial={{ x: 20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={logout}
-              className="relative group flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-gray-100 to-gray-50 hover:from-red-50 hover:to-orange-50 text-gray-700 hover:text-red-600 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg border border-gray-200/50 hover:border-red-200"
-            >
-              <LogOut className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-              <span className="font-medium">Logout</span>
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-red-500/0 to-orange-500/0 group-hover:from-red-500/10 group-hover:to-orange-500/10 transition-all duration-300"></div>
-            </motion.button>
+            <div className="flex items-center gap-2">
+              <motion.button
+                initial={{ x: 20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={logout}
+                className="relative group flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-gray-100 to-gray-50 hover:from-red-50 hover:to-orange-50 text-gray-700 hover:text-red-600 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg border border-gray-200/50 hover:border-red-200"
+              >
+                <LogOut className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                <span className="font-medium">Logout</span>
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-red-500/0 to-orange-500/0 group-hover:from-red-500/10 group-hover:to-orange-500/10 transition-all duration-300"></div>
+              </motion.button>
+              <button
+                aria-label="Toggle dark mode"
+                onClick={toggleTheme}
+                className="ml-2 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+              >
+                {theme === 'dark' ? '🌙' : '☀️'}
+              </button>
+            </div>
           </div>
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
