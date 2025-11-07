@@ -48,6 +48,7 @@ function Dashboard() {
   const [summarizing, setSummarizing] = useState<string | null>(null);
   const [insights, setInsights] = useState<string[]>([]);
   const [drawingNote, setDrawingNote] = useState<Note | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     if (user) {
@@ -199,6 +200,16 @@ function Dashboard() {
     return new Date(b.$createdAt || 0).getTime() - new Date(a.$createdAt || 0).getTime();
   });
 
+  // Filter notes based on search query
+  const filteredNotes = sortedNotes.filter((note) => {
+    const lowerCaseQuery = searchQuery.toLowerCase();
+    return (
+      note.title.toLowerCase().includes(lowerCaseQuery) ||
+      note.content.toLowerCase().includes(lowerCaseQuery) ||
+      (note.tags && note.tags.some((tag) => tag.toLowerCase().includes(lowerCaseQuery)))
+    );
+  });
+
   return (
     <div className="min-h-screen relative">
       {/* Squares Background */}
@@ -310,6 +321,19 @@ function Dashboard() {
           )}
         </div>
 
+        {/* Search Bar */}
+        {activeTab === 'notes' && (
+          <div className="mb-6">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search notes by title, content, or tags..."
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            />
+          </div>
+        )}
+
         {/* Content */}
         <AnimatePresence mode="wait">
           {activeTab === 'notes' ? (
@@ -320,7 +344,7 @@ function Dashboard() {
               exit={{ opacity: 0, y: -20 }}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
             >
-              {sortedNotes.map((note) => (
+              {filteredNotes.map((note) => (
                 <NoteCard
                   key={note.$id}
                   note={note}
