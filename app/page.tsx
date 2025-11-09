@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useTheme } from '../components/ThemeProvider';
 import Navbar from "@/components/Navbar";
+import { motion } from "framer-motion";
 
 type PixelBlastVariant = 'square' | 'circle' | 'triangle' | 'diamond';
 
@@ -762,72 +763,174 @@ const Auralis: React.FC = () => {
         <Navbar />
 
         {/* Hero Section */}
-        <section className="text-center py-20 px-4">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Your notes, organized and understood</h2>
-          <p className="text-lg md:text-xl mb-6">A simple note-taking app with AI-powered summaries and insights. Capture ideas, get summaries, discover patterns.</p>
+        <motion.section
+          className="text-center py-20 px-4"
+          initial={{ opacity: 0, y: 80, scale: 0.95 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+        >
+          <motion.h2
+            className="text-4xl md:text-5xl font-bold mb-4"
+            initial={{ rotateY: 90, opacity: 0 }}
+            whileInView={{ rotateY: 0, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 80, damping: 18, duration: 1.2 }}
+            viewport={{ once: true }}
+          >
+            Your notes, organized and understood
+          </motion.h2>
+          <motion.p
+            className="text-lg md:text-xl mb-6"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            viewport={{ once: true }}
+          >
+            A simple note-taking app with AI-powered summaries and insights. Capture ideas, get summaries, discover patterns.
+          </motion.p>
           <div className="space-x-4" style={{ pointerEvents: 'auto' }}>
             <Link href="/signup" className="inline-block bg-purple-600 px-6 py-3 rounded-lg text-lg hover:bg-purple-700">Get Started Free</Link>
             <Link href="/login" className="inline-block border border-white px-6 py-3 rounded-lg text-lg hover:bg-white hover:text-black">Sign In</Link>
           </div>
           <p className="mt-4 text-sm">Free to use • No credit card required</p>
-        </section>
+        </motion.section>
 
         {/* Features Section */}
-        <section className="py-16 px-4 bg-black bg-opacity-30">
+        <motion.section
+          className="py-16 px-4 max-w-5xl mx-auto"
+          initial={{ opacity: 0, y: 80, scale: 0.95 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+        >
           <h3 className="text-3xl font-bold text-center mb-12">Everything you need for better notes</h3>
           <p className="text-center text-lg mb-8">Powerful features that help you organize and understand your notes better</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <div className="p-6 bg-gray-800 bg-opacity-50 rounded-lg">
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={{
+              hidden: {},
+              visible: {
+                transition: {
+                  staggerChildren: 0.25
+                }
+              }
+            }}
+          >
+            <motion.div
+              className="p-6 bg-gray-800 bg-opacity-50 rounded-lg"
+              initial={{ opacity: 0, x: -80, scale: 0.9 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{ type: "spring", stiffness: 70, damping: 16, duration: 1 }}
+            >
               <h4 className="text-xl font-semibold mb-2">AI Summaries</h4>
               <p>Get instant AI-generated summaries of your notes. Extract key points and main ideas with one click.</p>
-            </div>
-            <div className="p-6 bg-gray-800 bg-opacity-50 rounded-lg">
+            </motion.div>
+            <motion.div
+              className="p-6 bg-gray-800 bg-opacity-50 rounded-lg"
+              initial={{ opacity: 0, y: 60, scale: 0.9 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ type: "spring", stiffness: 70, damping: 16, duration: 1 }}
+            >
               <h4 className="text-xl font-semibold mb-2">Smart Insights</h4>
               <p>Discover patterns and connections across your notes automatically. Organize by topics and categories.</p>
-            </div>
-            <div className="p-6 bg-gray-800 bg-opacity-50 rounded-lg">
+            </motion.div>
+            <motion.div
+              className="p-6 bg-gray-800 bg-opacity-50 rounded-lg"
+              initial={{ opacity: 0, x: 80, scale: 0.9 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{ type: "spring", stiffness: 70, damping: 16, duration: 1 }}
+            >
               <h4 className="text-xl font-semibold mb-2">Secure & Private</h4>
               <p>Your notes are encrypted and stored securely. Built with Appwrite for reliable authentication and storage.</p>
-            </div>
-          </div>
-        </section>
+            </motion.div>
+          </motion.div>
+        </motion.section>
 
         {/* How It Works Section */}
-        <section className="py-16 px-4">
+        <motion.section
+          className="py-16 px-4 max-w-5xl mx-auto"
+          initial={{ opacity: 0, y: 80, scale: 0.95 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+        >
           <h3 className="text-3xl font-bold text-center mb-12">How it works</h3>
           <p className="text-center text-lg mb-8">Three simple steps to better note-taking</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <div className="text-center">
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={{
+              hidden: {},
+              visible: {
+                transition: {
+                  staggerChildren: 0.25
+                }
+              }
+            }}
+          >
+            <motion.div
+              className="text-center"
+              initial={{ opacity: 0, x: -80, scale: 0.9 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{ type: "spring", stiffness: 70, damping: 16, duration: 1 }}
+            >
               <div className="text-4xl font-bold text-purple-400 mb-2">1</div>
               <h4 className="text-xl font-semibold mb-2">Create Notes</h4>
               <p>Write your thoughts, ideas, and important information in a clean, distraction-free editor.</p>
-            </div>
-            <div className="text-center">
+            </motion.div>
+            <motion.div
+              className="text-center"
+              initial={{ opacity: 0, y: 60, scale: 0.9 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ type: "spring", stiffness: 70, damping: 16, duration: 1 }}
+            >
               <div className="text-4xl font-bold text-purple-400 mb-2">2</div>
               <h4 className="text-xl font-semibold mb-2">Get Summaries</h4>
               <p>Click summarize to get AI-powered summaries and automatically generated tags for your notes.</p>
-            </div>
-            <div className="text-center">
+            </motion.div>
+            <motion.div
+              className="text-center"
+              initial={{ opacity: 0, x: 80, scale: 0.9 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{ type: "spring", stiffness: 70, damping: 16, duration: 1 }}
+            >
               <div className="text-4xl font-bold text-purple-400 mb-2">3</div>
               <h4 className="text-xl font-semibold mb-2">Discover Insights</h4>
               <p>View insights and patterns across all your notes to understand your thinking better.</p>
-            </div>
-          </div>
-        </section>
+            </motion.div>
+          </motion.div>
+        </motion.section>
 
         {/* Call to Action Section */}
-        <section className="text-center py-20 px-4 bg-black bg-opacity-30">
+        <motion.section
+          className="text-center py-20 px-4 bg-black bg-opacity-30"
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 1.1, ease: "easeOut" }}
+        >
           <h3 className="text-3xl font-bold mb-4">Start taking better notes today</h3>
           <p className="text-lg mb-6">Join users who are already organizing their thoughts with AI-powered insights</p>
           <Link href="/signup" className="inline-block bg-purple-600 px-6 py-3 rounded-lg text-lg hover:bg-purple-700" style={{ pointerEvents: 'auto' }}>Get Started Free</Link>
           <p className="mt-4 text-sm">No credit card required</p>
-        </section>
+        </motion.section>
 
         {/* Footer */}
-        <footer className="text-center py-8">
+        <motion.footer
+          className="text-center py-8"
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 1.1, ease: "easeOut" }}
+        >
           <p>Auralis</p>
           <p className="text-sm">© 2025 Auralis. A simple, powerful note-taking app.</p>
-        </footer>
+        </motion.footer>
       </div>
     </>
   );
