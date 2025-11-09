@@ -49,6 +49,7 @@ export const notesService = {
     if (data.tags !== undefined && data.tags !== null) updateData.tags = data.tags;
     if (data.drawing !== undefined) updateData.drawing = data.drawing;
     if (data.pinned !== undefined) updateData.pinned = data.pinned;
+    if (data.favorite !== undefined) updateData.favorite = data.favorite;
 
     // Make sure we have at least one field to update
     if (Object.keys(updateData).length === 0) {

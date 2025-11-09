@@ -9,6 +9,7 @@ export interface Note {
   drawing?: string; // JSON string of Excalidraw data
   pinned?: boolean; // Pin note to top
   userId: string;
+  favorite?: boolean; // Mark note as favorite
 }
 
 export interface User {

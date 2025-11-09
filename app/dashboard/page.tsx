@@ -42,7 +42,7 @@ function Dashboard() {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [notes, setNotes] = useState<Note[]>([]);
-  const [activeTab, setActiveTab] = useState<'notes' | 'insights'>('notes');
+  const [activeTab, setActiveTab] = useState<'notes' | 'insights' | 'favorites'>('notes');
   const [isCreating, setIsCreating] = useState(false);
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [newNote, setNewNote] = useState({ title: '', content: '' });
@@ -195,6 +195,19 @@ function Dashboard() {
     }
   };
 
+  const handleToggleFavorite = async (note: Note) => {
+    if (!note.$id) return;
+    try {
+      const updated = await notesService.updateNote(note.$id, {
+        favorite: !note.favorite,
+      });
+      setNotes(notes.map((n) => (n.$id === updated.$id ? updated : n)));
+    } catch (error) {
+      console.error('Failed to toggle favorite:', error);
+      alert('Failed to favorite/unfavorite note.');
+    }
+  };
+
   // Sort notes: pinned first, then by date
   const sortedNotes = [...notes].sort((a, b) => {
     if (a.pinned && !b.pinned) return -1;
@@ -202,8 +215,11 @@ function Dashboard() {
     return new Date(b.$createdAt || 0).getTime() - new Date(a.$createdAt || 0).getTime();
   });
 
-  // Filter notes based on search query
+  // Filter notes based on search query and active tab
   const filteredNotes = sortedNotes.filter((note) => {
+    if (activeTab === 'favorites') {
+      if (!note.favorite) return false;
+    }
     const lowerCaseQuery = searchQuery.toLowerCase();
     return (
       note.title.toLowerCase().includes(lowerCaseQuery) ||
@@ -307,6 +323,17 @@ function Dashboard() {
               All Notes
             </button>
             <button
+              onClick={() => setActiveTab('favorites')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-md transition ${
+                activeTab === 'favorites'
+                  ? 'bg-yellow-400 text-white'
+                  : 'text-gray-700 hover:bg-gray-100'
+              }`}
+            >
+              <span className="text-lg">{String.fromCodePoint(0x2B50)}</span>
+              Favorites
+            </button>
+            <button
               onClick={() => setActiveTab('insights')}
               className={`flex items-center gap-2 px-4 py-2 rounded-md transition ${
                 activeTab === 'insights'
@@ -332,7 +359,7 @@ function Dashboard() {
           )}
         </div>
 
-        {/* Search Bar */}
+        {/* Search Bar - only for notes tab */}
         {activeTab === 'notes' && (
           <div className="mb-6">
             <input
@@ -364,9 +391,38 @@ function Dashboard() {
                   onSummarize={handleSummarize}
                   onDraw={setDrawingNote}
                   onTogglePin={handleTogglePin}
+                  onToggleFavorite={handleToggleFavorite}
                   isSummarizing={summarizing === note.$id}
                 />
               ))}
+            </motion.div>
+          ) : activeTab === 'favorites' ? (
+            <motion.div
+              key="favorites"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+            >
+              {filteredNotes.length === 0 ? (
+                <div className="col-span-full text-center text-gray-500 py-12">
+                  No favorite notes yet.
+                </div>
+              ) : (
+                filteredNotes.map((note) => (
+                  <NoteCard
+                    key={note.$id}
+                    note={note}
+                    onEdit={setEditingNote}
+                    onDelete={handleDeleteNote}
+                    onSummarize={handleSummarize}
+                    onDraw={setDrawingNote}
+                    onTogglePin={handleTogglePin}
+                    onToggleFavorite={handleToggleFavorite}
+                    isSummarizing={summarizing === note.$id}
+                  />
+                ))
+              )}
             </motion.div>
           ) : (
             <motion.div
@@ -427,6 +483,7 @@ function NoteCard({
   onSummarize,
   onDraw,
   onTogglePin,
+  onToggleFavorite,
   isSummarizing,
 }: {
   note: Note;
@@ -435,11 +492,12 @@ function NoteCard({
   onSummarize: (note: Note) => void;
   onDraw: (note: Note) => void;
   onTogglePin: (note: Note) => void;
+  onToggleFavorite: (note: Note) => void;
   isSummarizing: boolean;
 }) {
   return (
     <SpotlightCard
-      className="rounded-xl overflow-hidden"
+      className={`rounded-xl overflow-hidden ${note.favorite ? 'ring-2 ring-yellow-400' : ''}`}
       spotlightColor="rgba(139, 92, 246, 0.15)"
     >
       <motion.div
@@ -447,23 +505,38 @@ function NoteCard({
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9 }}
-        className={`bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition ${
-          note.pinned ? 'ring-2 ring-yellow-400' : ''
-        }`}
+        className={`bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition ${note.pinned ? 'ring-2 ring-yellow-400' : ''}`}
       >
       <div className="flex items-start justify-between mb-2">
         <h3 className="text-lg font-semibold text-gray-900 flex-1">{note.title}</h3>
-        <button
-          onClick={() => onTogglePin(note)}
-          className={`p-1.5 rounded-lg transition ${
-            note.pinned
-              ? 'text-yellow-600 bg-yellow-50'
-              : 'text-gray-400 hover:text-yellow-600 hover:bg-yellow-50'
-          }`}
-          title={note.pinned ? 'Unpin note' : 'Pin note'}
-        >
-          {note.pinned ? <Pin className="w-4 h-4 fill-current" /> : <Pin className="w-4 h-4" />}
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => onTogglePin(note)}
+            className={`p-1.5 rounded-lg transition ${
+              note.pinned
+                ? 'text-yellow-600 bg-yellow-50'
+                : 'text-gray-400 hover:text-yellow-600 hover:bg-yellow-50'
+            }`}
+            title={note.pinned ? 'Unpin note' : 'Pin note'}
+          >
+            {note.pinned ? <Pin className="w-4 h-4 fill-current" /> : <Pin className="w-4 h-4" />}
+          </button>
+          <button
+            onClick={() => onToggleFavorite(note)}
+            className={`p-1.5 rounded-lg transition ${
+              note.favorite
+                ? 'text-yellow-500 bg-yellow-100 ring-2 ring-yellow-400'
+                : 'text-gray-400 hover:text-yellow-500 hover:bg-yellow-100'
+            }`}
+            title={note.favorite ? 'Unfavorite note' : 'Favorite note'}
+          >
+            {note.favorite ? (
+              <span className="text-xl">{String.fromCodePoint(0x2B50)}</span>
+            ) : (
+              <span className="text-xl">☆</span>
+            )}
+          </button>
+        </div>
       </div>
       <p className="text-gray-600 text-sm mb-4 line-clamp-3">{note.content}</p>
 
