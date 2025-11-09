@@ -19,12 +19,14 @@ import {
   Pen,
   Pin,
   PinOff,
+  Download,
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import SpotlightCard from '@/components/SpotlightCard';
 import Squares from '@/components/Squares';
 import GradientText from '@/components/GradientText';
 import { useTheme } from '@/components/ThemeProvider';
+import { exportNoteAsMarkdown, exportNoteAsPDF } from '@/lib/exportNote';
 
 const DrawingCanvas = dynamic(() => import('@/components/DrawingCanvas'), {
   ssr: false,
@@ -495,6 +497,25 @@ function NoteCard({
   onToggleFavorite: (note: Note) => void;
   isSummarizing: boolean;
 }) {
+  const [showExportMenu, setShowExportMenu] = useState(false);
+
+  const handleExport = (format: 'pdf' | 'md') => {
+    if (format === 'pdf') {
+      exportNoteAsPDF(note);
+    } else {
+      const md = exportNoteAsMarkdown(note);
+      const blob = new Blob([md], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${note.title || 'note'}.md`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  };
+
   return (
     <SpotlightCard
       className={`rounded-xl overflow-hidden ${note.favorite ? 'ring-2 ring-yellow-400' : ''}`}
@@ -512,23 +533,25 @@ function NoteCard({
         <div className="flex gap-2">
           <button
             onClick={() => onTogglePin(note)}
-            className={`p-1.5 rounded-lg transition ${
+            className={`p-1.5 rounded-lg flex items-center justify-center transition ${
               note.pinned
                 ? 'text-yellow-600 bg-yellow-50'
                 : 'text-gray-400 hover:text-yellow-600 hover:bg-yellow-50'
             }`}
             title={note.pinned ? 'Unpin note' : 'Pin note'}
+            style={{ minWidth: 36 }}
           >
-            {note.pinned ? <Pin className="w-4 h-4 fill-current" /> : <Pin className="w-4 h-4" />}
+            {note.pinned ? <Pin className="w-5 h-5" /> : <Pin className="w-5 h-5" />}
           </button>
           <button
             onClick={() => onToggleFavorite(note)}
-            className={`p-1.5 rounded-lg transition ${
+            className={`p-1.5 rounded-lg flex items-center justify-center transition ${
               note.favorite
                 ? 'text-yellow-500 bg-yellow-100 ring-2 ring-yellow-400'
                 : 'text-gray-400 hover:text-yellow-500 hover:bg-yellow-100'
             }`}
             title={note.favorite ? 'Unfavorite note' : 'Favorite note'}
+            style={{ minWidth: 36 }}
           >
             {note.favorite ? (
               <span className="text-xl">{String.fromCodePoint(0x2B50)}</span>
@@ -536,6 +559,33 @@ function NoteCard({
               <span className="text-xl">☆</span>
             )}
           </button>
+          <div className="relative">
+            <button
+              className="p-1.5 rounded-lg flex items-center justify-center transition text-gray-400 hover:text-yellow-500 hover:bg-yellow-100"
+              title="Export note"
+              onClick={() => setShowExportMenu((v) => !v)}
+              style={{ minWidth: 36 }}
+            >
+              <Download className="w-5 h-5" />
+            </button>
+            {showExportMenu && (
+              <div className="absolute right-0 mt-2 min-w-[160px] bg-white border border-yellow-300 rounded-xl shadow-xl z-10 overflow-hidden animate-fade-in">
+                <div className="px-4 py-2 text-sm font-semibold text-yellow-700 bg-yellow-50 border-b border-yellow-200">Export Note</div>
+                <button
+                  className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-yellow-100 hover:text-yellow-700 transition-all"
+                  onClick={() => { handleExport('pdf'); setShowExportMenu(false); }}
+                >
+                  <span className="inline-flex items-center gap-2"><Download className="w-4 h-4 text-yellow-500" /> PDF</span>
+                </button>
+                <button
+                  className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-yellow-100 hover:text-yellow-700 transition-all"
+                  onClick={() => { handleExport('md'); setShowExportMenu(false); }}
+                >
+                  <span className="inline-flex items-center gap-2"><span className="text-yellow-500 font-bold">.md</span> Markdown</span>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <p className="text-gray-600 text-sm mb-4 line-clamp-3">{note.content}</p>
