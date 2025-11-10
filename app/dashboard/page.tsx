@@ -270,7 +270,7 @@ function Dashboard() {
                   colors={['#3b82f6', '#8b5cf6', '#ec4899', '#8b5cf6', '#3b82f6']}
                   animationSpeed={6}
                 >
-                  <h1 className="text-3xl font-bold tracking-tight">Auralis</h1>
+                  <h1 className="text-3xl font-bold tracking-tight px-3 py-2">Auralis</h1>
                 </GradientText>
                 <motion.p
                   initial={{ opacity: 0 }}
