@@ -1,37 +1,44 @@
-# Contributing to Smart Notes (Auralis)
+# 🧠 Contributing to Smart Notes (Auralis)
 
-Thank you for your interest in contributing to Smart Notes! We welcome contributions from the community.
-Everyone Must do an Star to the repository to make it an rememberable and an great head start to open source
+Thank you for your interest in contributing to **Smart Notes (Auralis)**!  
+We’re thrilled to welcome developers, designers, and AI enthusiasts from the open-source community.  
+⭐ **Don’t forget to star the repository** to show your support and help us grow!
 
-## Code of Conduct
+---
 
-Please read and follow our [Code of Conduct](CODE_OF_CONDUCT.md) to maintain a respectful and inclusive environment.
+## 🧭 Code of Conduct
+Please read and follow our [Code of Conduct](./CODE_OF_CONDUCT.md) to maintain a respectful, inclusive, and safe environment for all contributors.
 
-## How to Contribute
+---
 
-### Reporting Bugs
+## 🐞 Reporting Bugs
+If you find a bug, please create an **issue** with the following details:
+- A clear **title** describing the bug  
+- **Steps to reproduce** the issue  
+- **Expected** vs **actual** behavior  
+- **Screenshots**, if applicable  
+- **Environment details** (OS, browser, Node.js version, etc.)
 
-If you find a bug, please create an issue with:
-- Clear title describing the bug
-- Steps to reproduce
-- Expected vs actual behavior
-- Screenshots (if applicable)
-- Environment details (OS, browser, Node version)
+This helps maintainers quickly reproduce and fix the issue.
 
-### Suggesting Features
+---
 
-Feature requests are welcome! Please:
-- Check existing issues first
-- Provide clear use case
-- Explain expected behavior
-- Consider implementation complexity
+## 💡 Suggesting Features
+Feature requests are welcome! Before creating a new one:
+1. Check existing issues to avoid duplicates.  
+2. Provide a **clear use case** and expected behavior.  
+3. Explain the **benefit or improvement** it brings to the project.  
+4. Keep feasibility and scope in mind.
 
-### Pull Request Process
+---
 
-1. **Fork the repository**
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/Auralis.git
-   cd Auralis
+## 🔁 Pull Request (PR) Process
+
+### 1️⃣ Fork the repository
+```bash
+git clone https://github.com/YOUR_USERNAME/Auralis.git
+cd Auralis
+
    ```
 
 2. **Create a feature branch**
