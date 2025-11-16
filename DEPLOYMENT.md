@@ -124,94 +124,55 @@ Coming soon - Appwrite Sites supports static sites and functions.
 
 For now, use Vercel or Netlify for the frontend, with Appwrite handling backend.
 
-## Option 4: Self-Hosting with Docker
+## Option 4: Docker Deployment
 
 ### Prerequisites
 - Docker and Docker Compose installed
-- VPS or server with Node.js
+- Environment variables configured
 
-### Step 1: Create Dockerfile
+### Step 1: Environment Setup
 
-```dockerfile
-FROM node:18-alpine AS base
+1. **Copy environment template**
+   ```bash
+   cp .env.example .env.local
+   ```
 
-# Install dependencies only when needed
-FROM base AS deps
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci
+2. **Update environment variables**
+   Edit `.env.local` with your actual values:
+   ```env
+   NEXT_PUBLIC_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
+   NEXT_PUBLIC_APPWRITE_PROJECT_ID=your_project_id
+   NEXT_PUBLIC_APPWRITE_DATABASE_ID=your_database_id
+   NEXT_PUBLIC_APPWRITE_NOTES_COLLECTION_ID=your_collection_id
+   GEMINI_API_KEY=your_gemini_api_key
+   ```
 
-# Rebuild the source code only when needed
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+### Step 2: Build and Run with Docker Compose
 
-# Set environment variables for build
-ARG NEXT_PUBLIC_APPWRITE_ENDPOINT
-ARG NEXT_PUBLIC_APPWRITE_PROJECT_ID
-ARG NEXT_PUBLIC_APPWRITE_DATABASE_ID
-ARG NEXT_PUBLIC_APPWRITE_NOTES_COLLECTION_ID
-ARG GEMINI_API_KEY
+```bash
+# Build and start the application
+docker-compose up --build
 
-ENV NEXT_PUBLIC_APPWRITE_ENDPOINT=$NEXT_PUBLIC_APPWRITE_ENDPOINT
-ENV NEXT_PUBLIC_APPWRITE_PROJECT_ID=$NEXT_PUBLIC_APPWRITE_PROJECT_ID
-ENV NEXT_PUBLIC_APPWRITE_DATABASE_ID=$NEXT_PUBLIC_APPWRITE_DATABASE_ID
-ENV NEXT_PUBLIC_APPWRITE_NOTES_COLLECTION_ID=$NEXT_PUBLIC_APPWRITE_NOTES_COLLECTION_ID
-ENV GEMINI_API_KEY=$GEMINI_API_KEY
+# Run in detached mode
+docker-compose up -d
 
-RUN npm run build
-
-# Production image
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV production
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
-
-EXPOSE 3000
-
-ENV PORT 3000
-
-CMD ["node", "server.js"]
+# Stop the application
+docker-compose down
 ```
 
-### Step 2: Update next.config.js
-
-Add to `next.config.js`:
-
-```javascript
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  output: 'standalone',
-}
-
-module.exports = nextConfig
-```
-
-### Step 3: Build and Run
+### Step 3: Manual Docker Build (Alternative)
 
 ```bash
 # Build Docker image
-docker build -t smart-notes .
+docker build -t auralis .
 
-# Run container
-docker run -p 3000:3000 \
-  -e NEXT_PUBLIC_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1 \
-  -e NEXT_PUBLIC_APPWRITE_PROJECT_ID=your_id \
-  -e NEXT_PUBLIC_APPWRITE_DATABASE_ID=your_id \
-  -e NEXT_PUBLIC_APPWRITE_NOTES_COLLECTION_ID=your_id \
-  -e GEMINI_API_KEY=your_key \
-  smart-notes
+# Run container with environment file
+docker run -p 3000:3000 --env-file .env.local auralis
 ```
+
+### Step 4: Health Check
+
+The application includes a health check endpoint at `/api/health` that Docker uses to monitor container status.
 
 ## Environment Variables
 
