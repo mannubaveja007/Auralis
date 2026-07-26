@@ -27,6 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${inter.variable} ${robotoMono.variable} antialiased`}
+        suppressHydrationWarning
       >
         <AuthProvider>{children}</AuthProvider>
       </body>
